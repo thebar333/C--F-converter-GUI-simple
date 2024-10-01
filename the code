@@ -1,0 +1,51 @@
+#READ ME:
+# It is a good idea to install PysimpleGUI otherwise this wont work
+# just go to console and typ pip install PySimpleGUI
+# it should work
+# BTW pass is 123
+import PySimpleGUI as sg
+fa = 0
+c = 0
+print("hi")
+login_layout = [ [sg.Text('Password'),sg.InputText(password_char="*")],
+            [sg.Button('Login')],
+            [sg.Text('',key='Status')],
+            ]
+login_window = sg.Window('', login_layout)
+while True:
+    event, values = login_window.read()
+    if event == sg.WIN_CLOSED:
+        exit(0)
+    if event == 'Login':
+        if "123" == values[0]:
+            break
+        else:
+            login_window['Status'].update("Wrong Password")
+sg.theme('DarkAmber')
+layout = [  [sg.Text('C -> F / F -> C converter')],
+         [sg.Text('value in C or F'), sg.Input(key='-TEMP-')],    
+         [sg.Button('Convert to C'), sg.Button('Convert to F'), sg.Cancel()],
+         [sg.Text('Result: '), sg.Text('', key='-OUTPUT-')],
+         ]
+window = sg.Window('temperature converter', layout)
+#window.read()
+while True:
+    event, values = window.read()
+    print(f"Event: {event}, Values: {values}")
+    if event == sg.WIN_CLOSED or event == 'Cancel':
+        break
+    try:
+        temp = float(values['-TEMP-'])
+        print(f"Input Temperature: {temp}")
+        if event == 'Convert to C':
+            print("Converting Fahrenheit to Celsius")
+            c = (temp - 32) * 5 / 9
+            window['-OUTPUT-'].update(f'{c:.2f} °C')
+        elif event == 'Convert to F':
+            print("Converting Celsius to Fahrenheit")
+            fa = (temp * 9 / 5) + 32
+            window['-OUTPUT-'].update(f'{fa:.2f} °F')
+    except ValueError:
+        print("Invalid input detected")
+        window['-OUTPUT-'].update('Please enter a valid number')
+window.close()
